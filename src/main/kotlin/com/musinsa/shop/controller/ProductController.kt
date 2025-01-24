@@ -21,8 +21,8 @@ class ProductController(
         return productService.getLowestCategoryProduct()
     }
 
-    @GetMapping("/lowestBrandProduct/{brandName}")
-    fun getLowestBrandProduct(@PathVariable brandName: String) : List<Product> {
+    @GetMapping("/lowestBrandProduct")
+    fun getLowestBrandProduct() : List<Product> {
         return emptyList()
     }
 
