@@ -22,8 +22,8 @@ class ProductController(
     }
 
     @GetMapping("/lowestBrandProduct")
-    fun getLowestBrandProduct() : List<Product> {
-        return emptyList()
+    fun getLowestBrandProduct() : LowestBrandProductResponseDto {
+        return productService.getLowestBrandProduct()
     }
 
     @GetMapping("/categoryExtreamsBrand/{categoryName}")

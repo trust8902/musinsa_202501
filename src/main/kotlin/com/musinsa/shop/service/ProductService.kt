@@ -26,7 +26,12 @@ class ProductService(
 
     fun getLowestCategoryProduct(): LowestCategoryProductResponseDto {
         return productRepository.findAllLowestCategoryProduct()
-            .orElseThrow { ProductResponseException(ProductResponseStatus.EMPTY_PRODUCT) }
+            .orElseThrow { ProductResponseException(ProductResponseStatus.EMPTY_LOWEST_CATEGORY_PRODUCT) }
+    }
+
+    fun getLowestBrandProduct(): LowestBrandProductResponseDto {
+        return productRepository.findByLowestBrand()
+            .orElseThrow { ProductResponseException(ProductResponseStatus.NOT_FOUND_LOWEST_BRAND_PRODUCT) }
     }
 
     fun getCategoryExtreamsBrand(categoryName: String): CategoryExtreamsBrandResponseDto {

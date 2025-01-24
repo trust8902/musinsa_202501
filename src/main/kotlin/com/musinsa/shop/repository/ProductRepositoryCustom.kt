@@ -14,6 +14,7 @@ import java.util.*
 
 interface ProductRepositoryCustom {
     fun findAllLowestCategoryProduct(): Optional<LowestCategoryProductResponseDto>
+    fun findByLowestBrand(): Optional<LowestBrandProductResponseDto>
     fun findByCategoryExtreamsBrands(categoryName: String): Optional<CategoryExtreamsBrandResponseDto>
 }
 
@@ -58,11 +59,46 @@ class ProductRepositoryCustomImpl(
             .filter { it.rowNumber == 1L }
 
         return if (products.isNotEmpty()) {
-            Optional.of(LowestCategoryProductResponseDto.fromEntities(
+            Optional.of(LowestCategoryProductResponseDto.fromTempDtos(
                 products
             ))
         } else {
             return Optional.empty()
+        }
+    }
+
+    // 구현 2. 단일 브랜드로 모든 카테고리 상품을 구매할 때 최저가격에 판매하는 브랜드와 카테고리의 상품가격, 총액을 조회
+    override fun findByLowestBrand(): Optional<LowestBrandProductResponseDto> {
+        val qProduct = QProduct.product
+        val qCategory = QCategory.category
+        val qBrand = QBrand.brand
+
+        val subQuery = queryFactory
+            .select(qProduct.brand.id)
+            .from(qProduct)
+            .groupBy(qProduct.brand.id)
+            .orderBy(qProduct.price.sum().asc())
+            .fetchFirst()
+
+        val products = queryFactory
+            .select(
+                Projections.constructor(
+                    LowestBrandProductTempDto::class.java,
+                    qProduct.brand.brandName,
+                    qProduct.category.categoryName,
+                    qProduct.price
+                )
+            )
+            .from(qProduct)
+            .innerJoin(qProduct.category, qCategory)
+            .innerJoin(qProduct.brand, qBrand)
+            .where(qProduct.brand.id.eq(subQuery))
+            .fetch()
+
+        return if (products.isNotEmpty()) {
+            Optional.of(LowestBrandProductResponseDto.fromTempDtos(products))
+        } else {
+            Optional.empty()
         }
     }
 

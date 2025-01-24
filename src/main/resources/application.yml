@@ -34,3 +34,9 @@ logging:
         core:
           env: DEBUG
       flywaydb: DEBUG
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE

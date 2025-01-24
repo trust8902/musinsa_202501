@@ -7,9 +7,9 @@ data class LowestCategoryProductResponseDto(
     val totalPrice: Int
 ) {
     companion object {
-        fun fromEntities(products: List<LowestCategoryTempProductDto>): LowestCategoryProductResponseDto {
+        fun fromTempDtos(products: List<LowestCategoryTempProductDto>): LowestCategoryProductResponseDto {
             return LowestCategoryProductResponseDto(
-                rows = LowestCategoryProductItemResponseDto.fromEntities(products),
+                rows = LowestCategoryProductItemResponseDto.fromTempDtos(products),
                 totalPrice = products.sumOf { it.price }
             )
         }
@@ -24,7 +24,7 @@ data class LowestCategoryProductItemResponseDto(
     val price: Int
 ) {
     companion object {
-        fun fromEntities(products: List<LowestCategoryTempProductDto>): List<LowestCategoryProductItemResponseDto> {
+        fun fromTempDtos(products: List<LowestCategoryTempProductDto>): List<LowestCategoryProductItemResponseDto> {
             return products.map {
                 LowestCategoryProductItemResponseDto(
                     categoryId = it.categoryId,
