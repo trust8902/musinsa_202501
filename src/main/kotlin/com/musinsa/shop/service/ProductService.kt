@@ -17,9 +17,16 @@ class ProductService(
     private val productRepository: ProductRepository,
     private val commonService: CommonService,
 ) {
-    fun getAllProducts(brandId: Long): List<ProductResponseDto> {
-        return productRepository.findAllByBrandId(brandId)
-            .takeIf { it != null }
+    fun getAllProducts(): List<ProductResponseDto> {
+        return productRepository.findAllProducts()
+            .takeIf { it.isNotEmpty() }
+            ?.map { ProductResponseDto.fromEntity(it) }
+                ?: throw ProductResponseException(ProductResponseStatus.EMPTY_PRODUCT)
+    }
+
+    fun getAllProductsByBrandName(brandName: String): List<ProductResponseDto> {
+        return productRepository.findAllByBrandName(brandName)
+            .takeIf { it.isNotEmpty() }
             ?.map { ProductResponseDto.fromEntity(it) }
                 ?: throw ProductResponseException(ProductResponseStatus.EMPTY_PRODUCT)
     }
@@ -41,12 +48,12 @@ class ProductService(
 
     @Transactional
     fun addProduct(request: ProductAddRequestDto): ProductResponseDto {
-        if (productRepository.existsByCategoryIdAndBrandId(request.categoryId, request.brandId)) {
+        if (productRepository.existsByCategoryNameAndBrandName(request.categoryName, request.brandName)) {
             throw ProductResponseException(ProductResponseStatus.ALREADY_EXISTS_PRODUCT)
         }
 
-        val category = commonService.getCategory(request.categoryId)
-        val brand = commonService.getBrand(request.brandId)
+        val category = commonService.getCategoryByCategoryName(request.categoryName)
+        val brand = commonService.getBrandByBrandName(request.brandName)
 
         val product = Product(
             category = category,

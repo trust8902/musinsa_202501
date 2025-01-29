@@ -1,6 +1,5 @@
 package com.musinsa.shop.controller
 
-import com.musinsa.shop.domain.Product
 import com.musinsa.shop.dto.*
 import com.musinsa.shop.service.ProductService
 import jakarta.validation.Valid
@@ -11,9 +10,14 @@ import org.springframework.web.bind.annotation.*
 class ProductController(
     private val productService: ProductService
 ) {
-    @GetMapping("/{brandId}")
-    fun getAllProducts(@PathVariable brandId: Long): List<ProductResponseDto> {
-        return productService.getAllProducts(brandId)
+    @GetMapping
+    fun getAllProducts(): List<ProductResponseDto> {
+        return productService.getAllProducts()
+    }
+
+    @GetMapping("/{brandName}")
+    fun getAllProductsByBrandName(@PathVariable brandName: String): List<ProductResponseDto> {
+        return productService.getAllProductsByBrandName(brandName)
     }
 
     @GetMapping("/lowestCategoryProduct")
