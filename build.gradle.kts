@@ -5,6 +5,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.7"
 	kotlin("plugin.jpa") version "1.9.25"
 	kotlin("kapt") version "2.1.0"
+	id("jacoco")
 }
 
 group = "com.musinsa"
@@ -25,6 +26,8 @@ configurations {
 repositories {
 	mavenCentral()
 }
+
+//apply(plugin = "jacoco")
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -48,10 +51,26 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.h2database:h2")
 	annotationProcessor("org.projectlombok:lombok")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+
+	testImplementation("org.springframework.boot:spring-boot-starter-test") // Spring Boot 테스트 기본 설정
+	testImplementation("org.springframework.boot:spring-boot-starter-web") // 웹 관련 설정
+
+	// Kotest
+	testImplementation("io.kotest:kotest-runner-junit5:5.9.1") // Kotest JUnit 5 실행기
+	testImplementation("io.kotest:kotest-assertions-core:5.9.1") // Kotest Assertion
+	testImplementation("io.kotest:kotest-property:5.9.1") // Property-based 테스트 (선택 사항)
+
+	// MockK
+	testImplementation("io.mockk:mockk:1.13.16")
+
+	// Spring + MockK 통합 지원
+	testImplementation("com.ninja-squad:springmockk:4.0.2")
+
+	// MyBatis 테스트 (필요한 경우)
 	testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	// Kotlin Coroutines 테스트 (필요 시 추가)
+	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1")
 }
 
 kotlin {
@@ -66,6 +85,19 @@ allOpen {
 	annotation("jakarta.persistence.Embeddable")
 }
 
+jacoco {
+	toolVersion = "0.8.10"
+}
+
+tasks.jacocoTestReport {
+	dependsOn(tasks.test)
+	reports {
+		xml.required.set(true)
+		html.required.set(true)
+	}
+}
+
 tasks.withType<Test> {
+	systemProperty("kotest.framework.classpath.scanning.autoscan.disable", "true")
 	useJUnitPlatform()
 }
