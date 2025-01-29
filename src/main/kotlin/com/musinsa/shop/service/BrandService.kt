@@ -18,7 +18,7 @@ class BrandService(
 ) {
     fun getAllBrands(): List<BrandResponseDto> {
         return brandRepository.findAll()
-            .takeIf { it != null }
+            .takeIf { it.isNotEmpty() }
             ?.map { BrandResponseDto.fromEntity(it) } ?: throw BrandResponseException(BrandResponseStatus.EMPTY_BRANDS)
     }
 
@@ -44,14 +44,14 @@ class BrandService(
             throw BrandResponseException(BrandResponseStatus.ALREADY_EXISTS_BRAND_NAME)
         }
 
-        val brand = commonService.getBrand(brandId)
+        val brand = commonService.getBrandById(brandId)
         brand.update(request.brandName)
         return BrandResponseDto.fromEntity(brand)
     }
 
     @Transactional
     fun deleteBrand(brandId: Long) {
-        val brand = commonService.getBrand(brandId)
+        val brand = commonService.getBrandById(brandId)
         brandRepository.delete(brand)
     }
 }

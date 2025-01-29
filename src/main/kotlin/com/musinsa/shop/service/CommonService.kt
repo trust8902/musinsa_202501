@@ -20,13 +20,23 @@ class CommonService(
     private val brandRepository: BrandRepository,
     private val productRepository: ProductRepository
 ) {
-    fun getCategory(categoryId: Long): Category {
+    fun getCategoryByCategoryId(categoryId: Long): Category {
         return categoryRepository.findById(categoryId)
             .orElseThrow { CategoryResponseException(CategoryResponseStatus.UNKNOWN_CATEGORY_NAME) }
     }
 
-    fun getBrand(brandId: Long): Brand {
+    fun getCategoryByCategoryName(categoryName: String): Category {
+        return categoryRepository.findAllByCategoryName(categoryName)
+            .orElseThrow { CategoryResponseException(CategoryResponseStatus.UNKNOWN_CATEGORY_NAME) }
+    }
+
+    fun getBrandById(brandId: Long): Brand {
         return brandRepository.findById(brandId)
+            .orElseThrow { BrandResponseException(BrandResponseStatus.UNKNOWN_BRAND_NAME) }
+    }
+
+    fun getBrandByBrandName(brandName: String): Brand {
+        return brandRepository.findByBrandName(brandName)
             .orElseThrow { BrandResponseException(BrandResponseStatus.UNKNOWN_BRAND_NAME) }
     }
 

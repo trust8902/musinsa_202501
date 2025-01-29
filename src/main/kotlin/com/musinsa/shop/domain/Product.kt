@@ -5,9 +5,14 @@ import org.hibernate.annotations.Comment
 import java.time.ZonedDateTime
 
 @Entity(name = "product")
+@SequenceGenerator(
+    name = "product_seq_generator",
+    sequenceName = "product_seq",
+    allocationSize = 1
+)
 data class Product(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq_generator")
     val id: Long? = null,
 
     @Comment("가격")
