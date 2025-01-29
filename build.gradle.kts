@@ -52,25 +52,17 @@ dependencies {
 	runtimeOnly("com.h2database:h2")
 	annotationProcessor("org.projectlombok:lombok")
 
-	testImplementation("org.springframework.boot:spring-boot-starter-test") // Spring Boot 테스트 기본 설정
-	testImplementation("org.springframework.boot:spring-boot-starter-web") // 웹 관련 설정
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-web")
+	testImplementation("org.mockito:mockito-core:5.15.2") // 최신 버전
+	testImplementation("org.mockito:mockito-inline:5.2.0") // 인라인 Mock 지원
 
 	// Kotest
 	testImplementation("io.kotest:kotest-runner-junit5:5.9.1") // Kotest JUnit 5 실행기
 	testImplementation("io.kotest:kotest-assertions-core:5.9.1") // Kotest Assertion
 	testImplementation("io.kotest:kotest-property:5.9.1") // Property-based 테스트 (선택 사항)
-
-	// MockK
 	testImplementation("io.mockk:mockk:1.13.16")
-
-	// Spring + MockK 통합 지원
 	testImplementation("com.ninja-squad:springmockk:4.0.2")
-
-	// MyBatis 테스트 (필요한 경우)
-	testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4")
-
-	// Kotlin Coroutines 테스트 (필요 시 추가)
-	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1")
 }
 
 kotlin {
@@ -89,6 +81,12 @@ jacoco {
 	toolVersion = "0.8.10"
 }
 
+tasks.test {
+	testLogging {
+		showStandardStreams = true
+	}
+}
+
 tasks.jacocoTestReport {
 	dependsOn(tasks.test)
 	reports {
@@ -98,6 +96,10 @@ tasks.jacocoTestReport {
 }
 
 tasks.withType<Test> {
+	jvmArgs("-Djdk.instrument.traceUsage=false", "-XX:+EnableDynamicAgentLoading")
+	jvmArgs("--add-opens=java.base/java.lang.reflect=ALL-UNNAMED")
+	jvmArgs("-javaagent:${configurations.testRuntimeClasspath.get().filter { it.name.contains("byte-buddy-agent") }.singleFile}")
 	systemProperty("kotest.framework.classpath.scanning.autoscan.disable", "true")
+	systemProperty("mockito.mock-maker", "inline")
 	useJUnitPlatform()
 }
