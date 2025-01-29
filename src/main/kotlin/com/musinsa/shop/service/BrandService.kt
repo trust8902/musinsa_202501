@@ -6,6 +6,7 @@ import com.musinsa.shop.domain.Brand
 import com.musinsa.shop.dto.BrandRequestDto
 import com.musinsa.shop.dto.BrandResponseDto
 import com.musinsa.shop.repository.BrandRepository
+import com.musinsa.shop.repository.ProductRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.ZonedDateTime
@@ -14,6 +15,7 @@ import java.time.ZonedDateTime
 @Transactional(readOnly = true)
 class BrandService(
     private val brandRepository: BrandRepository,
+    private val productRepository: ProductRepository,
     private val commonService: CommonService,
 ) {
     fun getAllBrands(): List<BrandResponseDto> {
@@ -52,6 +54,11 @@ class BrandService(
     @Transactional
     fun deleteBrand(brandId: Long) {
         val brand = commonService.getBrandById(brandId)
+
+        if (brand.products.isNotEmpty()) {
+            productRepository.deleteAll(brand.products)
+        }
+
         brandRepository.delete(brand)
     }
 }

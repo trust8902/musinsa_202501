@@ -4,6 +4,7 @@ import com.musinsa.shop.domain.Brand
 import com.musinsa.shop.dto.BrandRequestDto
 import com.musinsa.shop.dto.BrandResponseDto
 import com.musinsa.shop.repository.BrandRepository
+import com.musinsa.shop.repository.ProductRepository
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.clearMocks
@@ -18,8 +19,9 @@ import java.util.*
 class BrandServiceTest: DescribeSpec({
 
     val brandRepository = mockk<BrandRepository>(relaxed = true)
+    val productRepository = mockk<ProductRepository>(relaxed = true)
     val commonService = mockk<CommonService>(relaxed = true)
-    val brandService = BrandService(brandRepository, commonService)
+    val brandService = BrandService(brandRepository, productRepository, commonService)
 
     describe("상품 서비스 테스트") {
         afterTest {

@@ -26,7 +26,7 @@ data class Product(
     val createdAt: ZonedDateTime,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "brand_id", referencedColumnName = "id")
+    @JoinColumn(name = "brand_id")
     val brand: Brand,
 
     @ManyToOne(fetch = FetchType.LAZY)

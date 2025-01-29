@@ -24,7 +24,10 @@ data class Brand(
 
     @Comment("등록일")
     @Column(nullable = false)
-    val createdAt: ZonedDateTime
+    val createdAt: ZonedDateTime,
+
+    @OneToMany(mappedBy = "brand", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
+    val products: MutableList<Product> = mutableListOf(),
 ) {
     fun update(brandName: String) {
         this.brandName = brandName
