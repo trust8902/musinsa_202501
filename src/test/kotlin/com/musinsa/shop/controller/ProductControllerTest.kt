@@ -9,6 +9,7 @@ import com.musinsa.shop.service.ProductService
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.*
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.*
 import org.springframework.test.web.servlet.patch
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 
+@Tag("Controller")
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(ProductController::class)
 class ProductControllerTest: DescribeSpec({

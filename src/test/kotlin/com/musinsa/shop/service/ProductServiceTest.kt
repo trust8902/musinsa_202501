@@ -11,9 +11,11 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.*
+import org.junit.jupiter.api.Tag
 import java.time.ZonedDateTime
 import java.util.Optional
 
+@Tag("Service")
 class ProductServiceTest: DescribeSpec({
 
     val productRepository = mockk<ProductRepository>(relaxed = true)

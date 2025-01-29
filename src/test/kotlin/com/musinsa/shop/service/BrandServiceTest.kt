@@ -10,9 +10,11 @@ import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.jupiter.api.Tag
 import java.time.ZonedDateTime
 import java.util.*
 
+@Tag("Service")
 class BrandServiceTest: DescribeSpec({
 
     val brandRepository = mockk<BrandRepository>(relaxed = true)

@@ -10,6 +10,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
@@ -17,7 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.*
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 
-
+@Tag("Controller")
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(BrandController::class)
 class BrandControllerTest: DescribeSpec({

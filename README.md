@@ -15,6 +15,11 @@ filter를 추가해서 ROW_NUMBER() 값이 1인 경우로 범위를 줄였습니
 조회된 결과는 LowestCategoryTempProductDto로 반환받아서 이를 LowestCategoryProductResponseDto에 구현한 fromEntities() 메서드에서 가공하여 LowestCategoryProductResponseDto에 넣을 수 있도록 처리하였습니다.
 
 #### 구현 2.
+상품데이터에서 브랜드 ID로 GROUP BY 하여 가격을 합산한 결과가 제일 낮은 레코드를 한줄 조회하고
+조회된 레코드의 brandId를 상품 쿼리의 brandId에 대입합니다.
+
+상품 쿼리에 Category, Brand를 inner join 하여 카테고리명, 브랜드명을 조회하고
+brandId에 해당하는 카테고리별 상품 가격들을 반환하게 됩니다.
 
 #### 구현 3.
 구현1과 비슷하게 ROW_NUMBER()를 활용했습니다.
@@ -46,6 +51,8 @@ CRUD 구현의 경우 JPA로 구현하였습니다.
 * ShopApplication을 지정하고 프로젝트를 실행
 * 또는 터미널에서 프로젝트 루트로 이동하여 ./gradlew bootRun 로 프로젝트를 실행하면 됩니다.
 * 테스트는 메일에 첨부된 postman 백업파일을 postman에 import 하여 테스트하실 수 있습니다.
+* 서비스 테스트 시(TDD/터미널) : ./gradlew test -Dkotest.tags.include=Service
+* 컨트롤러 테스트 시 (TDD/터미널) : ./gradlew test -Dkotest.tags.include=Controller
 
 ### 3. 기타 추가 정보
 * TO DO
