@@ -1,14 +1,11 @@
-FROM openjdk:21-jdk-slim
-
+# 빌드 스테이지
+FROM openjdk:21-jdk-slim AS build
 WORKDIR /app
-COPY gradlew /app/gradlew
-COPY gradle /app/gradle
-COPY build.gradle.kts /app/build.gradle.kts
-COPY settings.gradle.kts /app/settings.gradle.kts
-COPY src /app/src
+COPY . /app
+RUN chmod +x gradlew && ./gradlew clean build
 
-RUN chmod +x gradlew && ./gradlew clean build && ls -l build/libs/
-
+# 실행 스테이지
+FROM openjdk:21-jdk-slim
+WORKDIR /app
 COPY --from=build /app/build/libs/*.jar /app/shop.jar
-
 CMD ["java", "-jar", "/app/shop.jar"]
