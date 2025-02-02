@@ -9,6 +9,6 @@ COPY src /app/src
 
 RUN chmod +x gradlew && ./gradlew clean build && ls -l build/libs/
 
-COPY build/libs/*.jar /app/shop.jar
+COPY --from=build /app/build/libs/*.jar /app/shop.jar
 
 CMD ["java", "-jar", "/app/shop.jar"]
