@@ -7,5 +7,6 @@ RUN chmod +x gradlew && ./gradlew clean build
 # 실행 스테이지
 FROM openjdk:21-jdk-slim
 WORKDIR /app
-COPY build/libs/*.jar shop.jar
-CMD ["java", "-jar", "shop.jar"]
+COPY --from=build /app/build/libs/*.jar /app/shop.jar
+RUN chmod +x /app/shop.jar
+CMD ["java", "-jar", "/app/shop.jar"]
