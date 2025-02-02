@@ -9,6 +9,8 @@ COPY src /app/src
 
 RUN chmod +x gradlew && ./gradlew clean build
 
+RUN echo "Built files in build/libs/:" && ls -l build/libs/
+
 COPY build/libs/shop-0.0.1-SNAPSHOT.jar /app/shop.jar
 
 CMD ["java", "-jar", "/app/shop.jar"]
