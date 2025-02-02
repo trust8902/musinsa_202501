@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  kotlin-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    volumes:
+      - .:/app
+    networks:
+      - kotlin-network
+    restart: always
+
+networks:
+  kotlin-network:
+    driver: bridge
