@@ -103,9 +103,3 @@ tasks.withType<Test> {
 	systemProperty("mockito.mock-maker", "inline")
 	useJUnitPlatform()
 }
-
-tasks.withType<Jar> {
-	archiveBaseName.set("shop")
-	archiveVersion.set("0.0.1-SNAPSHOT")
-	archiveClassifier.set("")
-}
